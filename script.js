@@ -3,17 +3,29 @@ const loader = document.getElementById("loader");
 
 let imageData = [];
 
+function setAttributes(element, attributes) {
+  for (const item in attributes) {
+    element.setAttribute(item, attributes[item]);
+  }
+}
+
 function displayPhoto() {
   imageData.forEach((photos) => {
     const item = document.createElement("a");
-    item.setAttribute("href", photos.links.html);
-    item.setAttribute("target", "_blank");
+
+    setAttributes(item, {
+      href: photos.links.html,
+      target: "_blank",
+    });
 
     // image element
     const imageEl = document.createElement("img");
-    imageEl.setAttribute("src", photos.urls.regular);
-    imageEl.setAttribute("alt", photos.alt_description);
-    imageEl.setAttribute("title", photos.alt_description);
+
+    setAttributes(imageEl, {
+      src: photos.urls.regular,
+      alt: photos.alt_description,
+      title: photos.alt_description,
+    });
 
     // Add to container
     item.appendChild(imageEl);
@@ -38,5 +50,15 @@ async function getdata() {
     console.log(error);
   }
 }
+
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 1000
+  ) {
+    console.log("loading more");
+    getdata();
+  }
+});
 
 getdata();
